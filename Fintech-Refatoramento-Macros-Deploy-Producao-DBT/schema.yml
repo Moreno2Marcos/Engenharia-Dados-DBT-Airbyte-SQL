@@ -1,0 +1,172 @@
+version: 2
+
+models:
+  - name: transacoes
+    description: "View que retorna as transações financeiras com valor inferior a 500."
+    columns:
+      - name: transacao_id
+        description: "Identificador único da transação."
+        tests:
+          - unique
+          - not_null
+
+      - name: cliente_id
+        description: "Identificador único do cliente associado à transação."
+        tests:
+          - not_null
+
+      - name: data_transacao
+        description: "Data em que a transação foi realizada."
+
+      - name: tipo_transacao
+        description: "Tipo da transação financeira."
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['PIX', 'BOLETO', 'TED', 'PAGAMENTO_FATURA', 'TRANSFERENCIA']
+
+      - name: valor
+        description: "Valor da transação, respeitando a regra de negócio de ser inferior a 500."
+        tests:
+          - not_null
+
+      - name: status_transacao
+        description: "Status da transação financeira."
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['LIQUIDADA', 'PENDENTE', 'ESTORNADA']
+
+  - name: clientes
+    description: "View que retorna os dados cadastrais dos clientes da fintech."
+    columns:
+      - name: cliente_id
+        description: "Identificador único do cliente."
+        tests:
+          - unique
+          - not_null
+
+      - name: nome
+        description: "Nome completo do cliente."
+        tests:
+          - not_null
+
+      - name: cidade
+        description: "Cidade onde o cliente reside."
+
+      - name: estado
+        description: "Estado onde o cliente reside."
+        tests:
+          - not_null
+
+      - name: segmento
+        description: "Segmento de relacionamento do cliente na fintech."
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['Varejo', 'Alta Renda', 'PME']
+
+  - name: clientes_sudeste
+    description: "View que retorna os dados dos clientes localizados na região Sudeste."
+    columns:
+      - name: cliente_id
+        description: "Identificador único do cliente."
+        tests:
+          - unique
+          - not_null
+
+      - name: nome
+        description: "Nome completo do cliente."
+        tests:
+          - not_null
+
+      - name: cidade
+        description: "Cidade onde o cliente reside."
+
+      - name: estado
+        description: "Estado onde o cliente reside, restrito à região Sudeste."
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['SP', 'RJ', 'MG', 'ES']
+
+      - name: segmento
+        description: "Segmento de relacionamento do cliente na fintech."
+
+  - name: total_transacoes_por_cliente
+    description: "Modelo MART que consolida o valor total transacionado por cliente nos estados de SP e RJ."
+    columns:
+      - name: cliente_id
+        description: "Identificador único do cliente."
+        tests:
+          - unique
+          - not_null
+
+      - name: nome
+        description: "Nome completo do cliente."
+        tests:
+          - not_null
+
+      - name: estado
+        description: "Estado do cliente considerado na agregação."
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['SP', 'RJ']
+
+      - name: total_transacoes
+        description: "Valor total das transações agregadas por cliente."
+        tests:
+          - not_null
+
+  - name: media_transacoes_por_cliente
+    description: "Modelo MART que calcula a média das transações por cliente, considerando apenas valores abaixo de 450 para clientes de SP e RJ."
+    columns:
+      - name: cliente_id
+        description: "Identificador único do cliente."
+        tests:
+          - unique
+          - not_null
+
+      - name: nome
+        description: "Nome completo do cliente."
+        tests:
+          - not_null
+
+      - name: estado
+        description: "Estado do cliente considerado na agregação."
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['SP', 'RJ']
+
+      - name: media_transacoes
+        description: "Média das transações elegíveis por cliente."
+        tests:
+          - not_null
+
+  - name: total_transacoes_por_cliente_sudeste
+    description: "Modelo MART que consolida o valor total transacionado por cliente da região Sudeste."
+    columns:
+      - name: cliente_id
+        description: "Identificador único do cliente."
+        tests:
+          - unique
+          - not_null
+
+      - name: nome
+        description: "Nome completo do cliente."
+        tests:
+          - not_null
+
+      - name: estado
+        description: "Estado do cliente na região Sudeste."
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['SP', 'RJ', 'MG', 'ES']
+
+      - name: total_transacoes
+        description: "Valor total das transações agregadas por cliente da região Sudeste."
+        tests:
+          - not_null
