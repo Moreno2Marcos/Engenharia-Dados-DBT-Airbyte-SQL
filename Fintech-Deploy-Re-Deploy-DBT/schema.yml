@@ -1,0 +1,168 @@
+version: 2
+
+models:
+  - name: int_clientes_contas
+    description: "Modelo intermediário que consolida dados de clientes e contas."
+
+    columns:
+      - name: id_cliente
+        description: "Identificador do cliente."
+        tests:
+          - not_null
+
+      - name: nome
+        description: "Nome do cliente."
+        tests:
+          - not_null
+
+      - name: email
+        description: "E-mail do cliente."
+        tests:
+          - not_null
+
+      - name: cliente_criado_em
+        description: "Data de criação do cadastro do cliente."
+        tests:
+          - not_null
+
+      - name: id_conta
+        description: "Identificador da conta."
+        tests:
+          - not_null
+          - unique
+
+      - name: tipo_conta
+        description: "Tipo da conta do cliente."
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['conta digital', 'conta corrente']
+
+      - name: saldo_atual
+        description: "Saldo atual da conta."
+        tests:
+          - not_null
+
+      - name: conta_criada_em
+        description: "Data de criação da conta."
+        tests:
+          - not_null
+
+  - name: int_transacoes_enriquecidas
+    description: "Modelo intermediário com transações enriquecidas com dados de cliente, conta e natureza da movimentação."
+
+    columns:
+      - name: id_transacao
+        description: "Identificador único da transação."
+        tests:
+          - not_null
+          - unique
+
+      - name: id_conta
+        description: "Identificador da conta relacionada à transação."
+        tests:
+          - not_null
+          - relationships:
+              to: ref('int_clientes_contas')
+              field: id_conta
+
+      - name: id_cliente
+        description: "Identificador do cliente dono da conta."
+        tests:
+          - not_null
+
+      - name: nome
+        description: "Nome do cliente."
+        tests:
+          - not_null
+
+      - name: email
+        description: "E-mail do cliente."
+        tests:
+          - not_null
+
+      - name: tipo_conta
+        description: "Tipo da conta."
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['conta digital', 'conta corrente']
+
+      - name: tipo_transacao
+        description: "Tipo original da transação."
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['deposito', 'pix_enviado', 'pix_recebido', 'pagamento_boleto', 'saque', 'compra_cartao']
+
+      - name: natureza_movimentacao
+        description: "Classificação da transação em entrada ou saída."
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['entrada', 'saida', 'nao_classificado']
+
+      - name: valor
+        description: "Valor da transação."
+        tests:
+          - not_null
+
+      - name: data_transacao
+        description: "Data e hora da transação."
+        tests:
+          - not_null
+
+      - name: data_movimento
+        description: "Data da transação sem horário."
+        tests:
+          - not_null
+
+      - name: ano_transacao
+        description: "Ano da transação."
+        tests:
+          - not_null
+
+      - name: mes_transacao
+        description: "Mês da transação."
+        tests:
+          - not_null
+
+      - name: dia_transacao
+        description: "Dia da transação."
+        tests:
+          - not_null
+
+  - name: mart_movimentacao_diaria
+    description: "MART diária com agregação das movimentações financeiras por data."
+
+    columns:
+      - name: data
+        description: "Data de referência da agregação diária."
+        tests:
+          - not_null
+          - unique
+
+      - name: qtd_transacoes
+        description: "Quantidade de transações no dia."
+        tests:
+          - not_null
+
+      - name: qtd_clientes_unicos
+        description: "Quantidade de clientes únicos com movimentação no dia."
+        tests:
+          - not_null
+
+      - name: total_entradas
+        description: "Soma dos valores de entrada no dia."
+        tests:
+          - not_null
+
+      - name: total_saidas
+        description: "Soma dos valores de saída no dia."
+        tests:
+          - not_null
+
+      - name: saldo_liquido
+        description: "Diferença entre entradas e saídas no dia."
+        tests:
+          - not_null
