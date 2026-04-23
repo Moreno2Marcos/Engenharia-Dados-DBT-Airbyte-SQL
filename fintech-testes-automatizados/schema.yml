@@ -1,0 +1,144 @@
+# Lab 8 - Automação de Testes de Modelos de Dados no DBT
+# Neste arquivo definimos os testes nativos do DBT, os testes com macro
+# e a documentação dos modelos e colunas
+
+# Definindo a versão do arquivo de configuração
+version: 2
+
+# Definição dos modelos
+models:
+  # Primeiro modelo: clientes
+  - name: clientes
+    description: "View que retorna os dados cadastrais dos clientes da fintech."
+    # Definição das colunas do modelo "clientes"
+    columns:
+      # Coluna "cliente_id" com documentação e testes aplicados
+      - name: cliente_id
+        description: "Identificador único do cliente."
+        tests:
+          # O valor de "cliente_id" não pode ser nulo
+          - not_null
+          # O valor de "cliente_id" deve ser único
+          - unique
+
+      # Coluna "nome" com documentação
+      - name: nome
+        description: "Nome completo do cliente."
+
+      # Coluna "email" com documentação e testes aplicados
+      - name: email
+        description: "Endereço de e-mail do cliente."
+        tests:
+          # O valor de "email" deve ser único
+          - unique
+
+      # Coluna "cidade" com documentação e testes aplicados
+      - name: cidade
+        description: "Cidade informada no cadastro do cliente."
+        tests:
+          # Aceita apenas valores específicos para a coluna "cidade"
+          - accepted_values:
+              # Lista de cidades aceitas
+              values: ['São Paulo', 'Recife', 'Belo Horizonte']
+
+  # Segundo modelo: contas
+  - name: contas
+    description: "View que retorna as contas financeiras cadastradas na fintech."
+    # Definição das colunas do modelo "contas"
+    columns:
+      # Coluna "conta_id" com documentação e testes aplicados
+      - name: conta_id
+        description: "Identificador único da conta."
+        tests:
+          # O valor de "conta_id" não pode ser nulo
+          - not_null
+          # O valor de "conta_id" deve ser único
+          - unique
+
+      # Coluna "tipo_conta" com documentação e testes aplicados
+      - name: tipo_conta
+        description: "Tipo da conta financeira do cliente."
+        tests:
+          # Aceita apenas valores específicos para o tipo de conta
+          - accepted_values:
+              # Lista de tipos de conta aceitos
+              values: ['corrente', 'digital', 'investimento']
+
+      # Coluna "saldo" com documentação e testes aplicados
+      - name: saldo
+        description: "Saldo atual disponível na conta."
+        tests:
+          # O valor de "saldo" não pode ser nulo
+          - not_null
+          # Teste de faixa via macro
+          - accepted_range:
+              min_value: 0
+              max_value: 1000000
+
+      # Coluna "status_conta" com documentação e testes aplicados
+      - name: status_conta
+        description: "Situação atual da conta na fintech."
+        tests:
+          # Aceita apenas valores específicos para o status da conta
+          - accepted_values:
+              # Lista de status aceitos
+              values: ['ativa', 'bloqueada', 'encerrada']
+
+  # Terceiro modelo: transacoes
+  - name: transacoes
+    description: "Tabela que retorna as transações financeiras realizadas pelos clientes."
+    # Definição das colunas do modelo "transacoes"
+    columns:
+      # Coluna "transacao_id" com documentação e testes aplicados
+      - name: transacao_id
+        description: "Identificador único da transação."
+        tests:
+          # O valor de "transacao_id" não pode ser nulo
+          - not_null
+          # O valor de "transacao_id" deve ser único
+          - unique
+
+      # Coluna "cliente_id" com documentação e testes aplicados
+      - name: cliente_id
+        description: "Identificador do cliente responsável pela transação."
+        tests:
+          # Relacionamento com a coluna "cliente_id" do modelo "clientes"
+          - relationships:
+              to: ref('clientes')
+              field: cliente_id
+
+      # Coluna "conta_id" com documentação e testes aplicados
+      - name: conta_id
+        description: "Identificador da conta associada à transação."
+        tests:
+          # Relacionamento com a coluna "conta_id" do modelo "contas"
+          - relationships:
+              to: ref('contas')
+              field: conta_id
+
+      # Coluna "tipo_transacao" com documentação e testes aplicados
+      - name: tipo_transacao
+        description: "Tipo de operação financeira realizada."
+        tests:
+          # Aceita apenas valores específicos para o tipo de transação
+          - accepted_values:
+              # Lista de tipos de transação aceitos
+              values: ['deposito', 'transferencia', 'pagamento', 'pix', 'saque']
+
+      # Coluna "valor" com documentação e testes aplicados
+      - name: valor
+        description: "Valor monetário da transação."
+        tests:
+          # O valor de "valor" não pode ser nulo
+          - not_null
+          # Verifica se o valor está dentro de uma faixa aceitável
+          - accepted_range:
+              min_value: 0.01
+              max_value: 1000000
+
+      # Coluna "data_transacao" com documentação e testes aplicados
+      - name: data_transacao
+        description: "Data em que a transação foi registrada."
+        tests:
+          # O valor de "data_transacao" não pode ser nulo
+          - not_null
