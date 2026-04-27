@@ -30,3 +30,5 @@ Demonstrar um pipeline analítico simples e rastreável, da camada de staging at
 O fluxo desta POC foi **baseado em referência de laboratório** e **adaptado para um cenário FinTech**. Não se trata de uma solução original integralmente autoral.
 
 # Link do Artigo Publicado no Linkedin contendo a Contextualização completa do projeto:
+
+https://www.linkedin.com/pulse/poc-fintech-pipeline-de-dados-com-python-dbt-bigquery-iv%25C3%25A1n-moreno-15cye
