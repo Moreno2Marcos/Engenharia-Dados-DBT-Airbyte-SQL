@@ -1,0 +1,18 @@
+# Lab 9 - Analytics Engineering e Linhagem de Dados com Python, DBT, BigQuery e Looker Studio
+
+version: 2
+
+models:
+  - name: fintech_mart_transacoes_por_mes
+    description: "Relatório que agrupa as transacoes por mês, mostrando o total de vendas e o valor total arrecadado, além do trimestre correspondente."
+    columns:
+      - name: mes_calendario
+        description: "Mês do ano em que as transacoes ocorreram."
+      - name: ano_calendario
+        description: "Ano em que as transacoes ocorreram."
+      - name: trimestre_calendario
+        description: "Trimestre do ano em que as transacoes ocorreram."
+      - name: total_transacoes_mensal
+        description: "Quantidade total de produtos transacionados no mês."
+      - name: valor_total_mensal
+        description: "Valor total arrecadado com as transacoes no mês."

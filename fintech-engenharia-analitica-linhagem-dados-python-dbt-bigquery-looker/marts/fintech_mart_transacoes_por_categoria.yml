@@ -1,0 +1,14 @@
+# Lab 9 - Analytics Engineering e Linhagem de Dados com Python, DBT, BigQuery e Looker Studio
+
+version: 2
+
+models:
+  - name: fintech_mart_transacoes_por_categoria
+    description: "Relatório que apresenta o total de transacoes por categoria de produto, detalhando a quantidade transacionada e o valor total arrecadado para cada categoria."
+    columns:
+      - name: categoria_produto
+        description: "Categoria à qual os produtos transacionados pertencem."
+      - name: quantidade_transacionada
+        description: "Quantidade total transacionada de todos os produtos dentro da categoria."
+      - name: valor_total_transacoes
+        description: "Valor total arrecadado com as transacoes de todos os produtos na categoria."
