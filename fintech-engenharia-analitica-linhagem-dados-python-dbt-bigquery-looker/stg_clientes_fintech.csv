@@ -1,0 +1,11 @@
+cliente_id,nome,idade,genero,email
+1,Ana Silva,29,F,ana.silva@fintech.com
+2,Bruno Souza,34,M,bruno.souza@fintech.com
+3,Carla Oliveira,41,F,carla.oliveira@fintech.com
+4,Diego Santos,26,M,diego.santos@fintech.com
+5,Eduarda Lima,37,F,eduarda.lima@fintech.com
+6,Felipe Almeida,45,M,felipe.almeida@fintech.com
+7,Gabriela Costa,31,F,gabriela.costa@fintech.com
+8,Henrique Pereira,39,M,henrique.pereira@fintech.com
+9,Isabela Gomes,28,F,isabela.gomes@fintech.com
+10,João Martins,52,M,joão.martins@fintech.com

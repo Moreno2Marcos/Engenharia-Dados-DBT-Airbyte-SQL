@@ -1,0 +1,11 @@
+produto_id,nome_produto,categoria,preco
+1,Conta Digital,Conta,0.0
+2,Cartão de Crédito,Cartão,15.9
+3,Empréstimo Pessoal,Crédito,1200.0
+4,Antecipação de Recebíveis,Crédito,850.0
+5,Seguro Celular,Seguros,19.9
+6,Seguro de Vida,Seguros,34.9
+7,CDB Liquidez Diária,Investimentos,100.0
+8,Tesouro Selic,Investimentos,50.0
+9,Pix Cobrança,Pagamentos,2.5
+10,Maquininha Smart,Pagamentos,299.9
