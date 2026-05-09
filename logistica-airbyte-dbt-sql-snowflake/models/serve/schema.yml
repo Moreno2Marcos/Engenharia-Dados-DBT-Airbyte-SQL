@@ -1,0 +1,29 @@
+version: 2
+
+models:
+  - name: dim_cliente
+    columns:
+      - name: cliente_id
+        tests: ['unique', 'not_null']
+
+  - name: dim_motorista
+    columns:
+      - name: motorista_id
+        tests: ['unique', 'not_null']
+
+  - name: dim_veiculo
+    columns:
+      - name: veiculo_id
+        tests: ['unique', 'not_null']
+
+  - name: dim_rota
+    columns:
+      - name: rota_id
+        tests: ['unique', 'not_null']
+
+  - name: fct_entrega
+    columns:
+      - name: entrega_id
+        tests: ['unique', 'not_null']
+      - name: pedido_id
+        tests: ['unique', 'not_null']
