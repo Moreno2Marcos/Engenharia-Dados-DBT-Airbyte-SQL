@@ -1,0 +1,27 @@
+version: 2
+
+models:
+  - name: stg_clientes
+    columns:
+      - name: id_cliente
+        tests: ['unique', 'not_null']
+
+  - name: stg_motoristas
+    columns:
+      - name: id_motorista
+        tests: ['unique', 'not_null']
+
+  - name: stg_veiculos
+    columns:
+      - name: id_veiculo
+        tests: ['unique', 'not_null']
+
+  - name: stg_pedidos
+    columns:
+      - name: id_pedido
+        tests: ['unique', 'not_null']
+
+  - name: stg_entregas
+    columns:
+      - name: id_entrega
+        tests: ['unique', 'not_null']
