@@ -1,0 +1,178 @@
+version: 2
+
+sources:
+  - name: logistica_schema
+    description: "Fonte transacional de logística carregada para a área de staging."
+    schema: '{{ target.schema }}'
+    tables:
+      - name: clientes
+        description: "Cadastro de clientes que realizam pedidos logísticos."
+        columns:
+          - name: id_cliente
+            description: "Identificador único do cliente."
+            tests: ['unique', 'not_null']
+          - name: nome_razao_social
+            description: "Nome do cliente ou razão social da empresa."
+            tests: ['not_null']
+          - name: tipo_pessoa
+            description: "Tipo de cliente: pessoa física ou pessoa jurídica."
+            tests: ['not_null']
+          - name: documento
+            description: "Documento do cliente, CPF ou CNPJ."
+            tests: ['unique', 'not_null']
+          - name: email
+            description: "Email de contato do cliente."
+          - name: telefone
+            description: "Telefone de contato do cliente."
+          - name: cidade
+            description: "Cidade do cliente."
+          - name: uf
+            description: "Unidade federativa do cliente."
+          - name: ativo
+            description: "Indica se o cliente está ativo."
+            tests: ['not_null']
+          - name: criado_em
+            description: "Data e hora de criação do registro."
+            tests: ['not_null']
+
+      - name: motoristas
+        description: "Cadastro de motoristas disponíveis para operação logística."
+        columns:
+          - name: id_motorista
+            description: "Identificador único do motorista."
+            tests: ['unique', 'not_null']
+          - name: nome
+            description: "Nome completo do motorista."
+            tests: ['not_null']
+          - name: cpf
+            description: "CPF do motorista."
+            tests: ['unique', 'not_null']
+          - name: cnh_numero
+            description: "Número da CNH do motorista."
+            tests: ['unique', 'not_null']
+          - name: categoria_cnh
+            description: "Categoria da habilitação."
+            tests: ['not_null']
+          - name: telefone
+            description: "Telefone de contato do motorista."
+          - name: status
+            description: "Situação operacional do motorista."
+            tests: ['not_null']
+          - name: criado_em
+            description: "Data e hora de criação do registro."
+            tests: ['not_null']
+
+      - name: veiculos
+        description: "Cadastro de veículos utilizados nas entregas."
+        columns:
+          - name: id_veiculo
+            description: "Identificador único do veículo."
+            tests: ['unique', 'not_null']
+          - name: placa
+            description: "Placa do veículo."
+            tests: ['unique', 'not_null']
+          - name: tipo_veiculo
+            description: "Tipo do veículo."
+            tests: ['not_null']
+          - name: capacidade_kg
+            description: "Capacidade máxima de carga em quilos."
+            tests: ['not_null']
+          - name: capacidade_m3
+            description: "Capacidade máxima de carga em metros cúbicos."
+          - name: status
+            description: "Situação operacional do veículo."
+            tests: ['not_null']
+          - name: criado_em
+            description: "Data e hora de criação do registro."
+            tests: ['not_null']
+
+      - name: pedidos
+        description: "Pedidos logísticos registrados pelos clientes."
+        columns:
+          - name: id_pedido
+            description: "Identificador único do pedido."
+            tests: ['unique', 'not_null']
+          - name: id_cliente
+            description: "Cliente responsável pelo pedido."
+            tests:
+              - not_null
+              - relationships:
+                  to: source('logistica_schema', 'clientes')
+                  field: id_cliente
+          - name: numero_pedido
+            description: "Código comercial ou externo do pedido."
+            tests: ['unique', 'not_null']
+          - name: data_pedido
+            description: "Data e hora de criação do pedido."
+            tests: ['not_null']
+          - name: endereco_origem
+            description: "Endereço de coleta."
+            tests: ['not_null']
+          - name: cidade_origem
+            description: "Cidade de origem."
+            tests: ['not_null']
+          - name: uf_origem
+            description: "Unidade federativa de origem."
+            tests: ['not_null']
+          - name: endereco_destino
+            description: "Endereço de entrega."
+            tests: ['not_null']
+          - name: cidade_destino
+            description: "Cidade de destino."
+            tests: ['not_null']
+          - name: uf_destino
+            description: "Unidade federativa de destino."
+            tests: ['not_null']
+          - name: peso_total_kg
+            description: "Peso total transportado no pedido."
+            tests: ['not_null']
+          - name: volume_total_m3
+            description: "Volume total transportado no pedido."
+          - name: valor_frete
+            description: "Valor do frete associado ao pedido."
+          - name: status
+            description: "Situação atual do pedido no fluxo logístico."
+            tests: ['not_null']
+
+      - name: entregas
+        description: "Execução operacional das entregas vinculadas aos pedidos."
+        columns:
+          - name: id_entrega
+            description: "Identificador único da entrega."
+            tests: ['unique', 'not_null']
+          - name: id_pedido
+            description: "Pedido associado à entrega."
+            tests:
+              - unique
+              - not_null
+              - relationships:
+                  to: source('logistica_schema', 'pedidos')
+                  field: id_pedido
+          - name: id_motorista
+            description: "Motorista responsável pela entrega."
+            tests:
+              - relationships:
+                  to: source('logistica_schema', 'motoristas')
+                  field: id_motorista
+          - name: id_veiculo
+            description: "Veículo utilizado na entrega."
+            tests:
+              - relationships:
+                  to: source('logistica_schema', 'veiculos')
+                  field: id_veiculo
+          - name: data_coleta_prevista
+            description: "Data prevista para coleta."
+          - name: data_entrega_prevista
+            description: "Data prevista para entrega."
+          - name: data_coleta_real
+            description: "Data real da coleta."
+          - name: data_entrega_real
+            description: "Data real da entrega."
+          - name: status
+            description: "Situação operacional da entrega."
+            tests: ['not_null']
+          - name: observacao
+            description: "Observações sobre ocorrência, atraso ou falha."
+          - name: criado_em
+            description: "Data e hora de criação do registro."
+            tests: ['not_null']
